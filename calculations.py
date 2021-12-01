@@ -3,13 +3,11 @@ import math
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from mpl_toolkits.mplot3d import Axes3D
-from tletools import TLE
-from astropy import units as u
-from poliastro.bodies import Earth, Moon
-from poliastro.earth import Orbit
 
-#rEarth = 6371 #km
-rEarth = 1
+rEarth = 6371 #km
+
+colors = ["navy","cyan","red","darkred","deepskyblue","dodgerblue","gold"]
+#colors = ["navy","navy","navy"]
 
 
 def convert_gps(gps):
@@ -23,8 +21,7 @@ def createOrbit(tle):
 
 def parse_tle(file):
     data = open(file, "r")
-    data = data.read().strip().splitlines()
-    data = TLE.from_lines(*data)
+    data = data.read()
     return data
 
 
@@ -52,6 +49,7 @@ def plot_coordinate(gps_array):
 
 
 def inclination_angle(location, orbit, time):
+
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
     ax.axes.set_xlim3d(left=-2, right=2) 
@@ -81,3 +79,40 @@ def inclination_angle(location, orbit, time):
 
 
     plt.show()
+
+
+
+def plot_polar(azims,elevs,polydegree):
+    
+    plt.figure()
+    
+    ax = plt.subplot(111, projection='polar')
+    ax.set_theta_direction(-1)
+    ax.set_theta_zero_location('N')
+    
+    
+    iteration = 0
+    for list in azims:
+        color = colors[iteration % len(colors)]
+        print("Printing pass %s in color %s"%(iteration,color))
+        
+        
+        plt.plot(np.radians(azims[iteration]), elevs[iteration], '.',)
+        #np.polyfit(azims[iteration], elevs[iteration], polydegree) #Plot the best fit line using a polynomial equation
+        iteration += 1
+
+     
+    ax.set_yticks(range(0, 90, 20))
+    ax.set_yticklabels(map(str, range(90, 0, -20)))
+    ax.set_rmax(90)
+    plt.show()
+
+
+
+def event_parser(event):
+    data = ""
+    if event.info == "AOS":
+        data = "VIS"
+    else:
+        data = event.info
+    return data
