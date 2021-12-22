@@ -82,28 +82,22 @@ def inclination_angle(location, orbit, time):
 
 
 
-def plot_polar(azims,elevs,polydegree):
-    
-    plt.figure()
-    
+def plot_polar(azims,elevs):
+    plt.figure() 
     ax = plt.subplot(111, projection='polar')
-    ax.set_theta_direction(-1)
+    ax.set_theta_direction(-1) #Deze delen moeten gescheiden blijven
     ax.set_theta_zero_location('N')
-    
-    
+
     iteration = 0
     for list in azims:
         color = colors[iteration % len(colors)]
-        print("Printing pass %s in color %s"%(iteration,color))
-        
-        
-        plt.plot(np.radians(azims[iteration]), elevs[iteration], '.',)
-        #np.polyfit(azims[iteration], elevs[iteration], polydegree) #Plot the best fit line using a polynomial equation
+        #print("Printing pass %s in color %s"%(iteration,color))
+        plt.plot(np.radians(azims[iteration]), elevs[iteration], '.', color=color)
+        #np.polyfit(np.radians(azimuths[iteration]), elevations[iteration],2) #Plot the best fit line using a polynomial equation
         iteration += 1
 
-     
     ax.set_yticks(range(0, 90, 20))
-    ax.set_yticklabels(map(str, range(90, 0, -20)))
+    ax.set_yticklabels(map(str, range(90, 0, -20))) #Deze delen moeten gescheiden blijven
     ax.set_rmax(90)
     plt.show()
 
